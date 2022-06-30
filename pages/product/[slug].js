@@ -10,16 +10,15 @@ import {
   Card,
   Button,
 } from '@material-ui/core';
-import { useRouter } from 'next/router';
-import data from '../../utils/data';
+
+import db from '../../utils/db';
+import Product from '../../models/Product';
 import Layout from '../../components/Layout';
 import useStyles from '../../utils/styles';
 
-export default function ProductScreen() {
-  const router = useRouter();
-  const { slug } = router.query;
+export default function ProductScreen(props) {
+  const { product } = props;
   const classes = useStyles();
-  const product = data.products.find((p) => p.slug === slug);
 
   if (!product) {
     return <p>Product not found</p>;
@@ -104,4 +103,15 @@ export default function ProductScreen() {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { slug } = context.query;
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+
+  return {
+    props: { product: db.convertDocToObj(product) },
+  };
 }
