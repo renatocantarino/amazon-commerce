@@ -18,6 +18,14 @@ function reducer(state, action) {
       return { ...state, darkMode: !state.darkMode };
     case 'TOGGLE_DARK_MODE_OFF':
       return { ...state, darkMode: !state.darkMode };
+    case 'CART_REMOVE_ITEM': {
+      const cartItems = state.cart.cartItems.filter(
+        (item) => item._id !== action.payload._id
+      );
+
+      Cookies.set('cookie-cartItems', JSON.stringify(cartItems));
+      return { ...state, cart: { ...state.cart, cartItems } };
+    }
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(

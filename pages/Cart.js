@@ -20,6 +20,7 @@ import Layout from '../components/Layout';
 import { Store } from '../utils/context/Store';
 import NextLink from 'next/link';
 import Image from 'next/image';
+import axios from 'axios';
 
 export default function Cart() {
   const { state, dispatch } = useContext(Store);
@@ -27,16 +28,30 @@ export default function Cart() {
     cart: { cartItems },
   } = state;
 
+  const updateQuantityHandler = async (item, quantity) => {
+    const { data } = await axios.get(`/api/products/${item._id}`);
+    if (data.countInStock <= quantity) {
+      window.alert('Out of stock');
+      return;
+    }
+
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+  };
+
+  const removeItemHandler = async (item) => {
+    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+  };
+
   return (
     <Layout title="Shopping Cart">
       <Typography component="h1" variant="h1">
         Shopping Cart
       </Typography>
       {cartItems.length === 0 ? (
-        <div>
-          Cart is empty.
+        <div align="center">
+          <h1>Cart is empty.</h1>
           <NextLink href="/" passHref>
-            Go shopping
+            <Link>Go shopping</Link>
           </NextLink>
         </div>
       ) : (
@@ -76,7 +91,12 @@ export default function Cart() {
                         </NextLink>
                       </TableCell>
                       <TableCell align="right">
-                        <Select value={item.quantity}>
+                        <Select
+                          value={item.quantity}
+                          onChange={(e) =>
+                            updateQuantityHandler(item, e.target.value)
+                          }
+                        >
                           {[...Array(item.countInStock).keys()].map((x) => (
                             <MenuItem key={x + 1} value={x + 1}>
                               {x + 1}
@@ -86,7 +106,11 @@ export default function Cart() {
                       </TableCell>
                       <TableCell align="right">${item.price}</TableCell>
                       <TableCell align="right">
-                        <Button variant="contained" color="secondary">
+                        <Button
+                          variant="contained"
+                          onClick={() => removeItemHandler(item)}
+                          color="secondary"
+                        >
                           x
                         </Button>
                       </TableCell>
