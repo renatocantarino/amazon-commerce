@@ -9,15 +9,17 @@ import {
   Typography,
   Switch,
   Container,
+  Badge,
   Link,
   CssBaseline,
 } from '@material-ui/core';
 import { Store } from '../utils/context/Store';
 import Cookies from 'js-cookie';
+import dynamic from 'next/dynamic';
 
-export default function Layout({ title, description, children }) {
+function Layout({ title, description, children }) {
   const { state, dispatch } = useContext(Store);
-  const { darkMode } = state;
+  const { darkMode, cart } = state;
 
   const Theme = createTheme({
     typography: {
@@ -66,7 +68,21 @@ export default function Layout({ title, description, children }) {
                 onChange={darkModeChangeHandler}
               ></Switch>
               <NextLink href="/cart" passHref>
-                <Link>Cart</Link>
+                <Link>
+                  <Typography component="span">
+                    {cart.cartItems.length > 0 ? (
+                      <Badge
+                        color="secondary"
+                        overlap="rectangular"
+                        badgeContent={cart.cartItems.length}
+                      >
+                        Cart
+                      </Badge>
+                    ) : (
+                      'Cart'
+                    )}
+                  </Typography>
+                </Link>
               </NextLink>
               <NextLink href="/Login" passHref>
                 <Link>Login</Link>
@@ -82,3 +98,4 @@ export default function Layout({ title, description, children }) {
     </div>
   );
 }
+export default dynamic(() => Promise.resolve(Layout), { ssr: false });
