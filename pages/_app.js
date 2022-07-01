@@ -1,6 +1,8 @@
+import { SnackbarProvider } from 'notistack';
 import { useEffect } from 'react';
 import '../styles/globals.css';
 import { StoreProvide } from '../utils/context/Store';
+import { Slide } from '@material-ui/core';
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -11,9 +13,11 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <StoreProvide>
-      <Component {...pageProps} />
-    </StoreProvide>
+    <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+      <StoreProvide>
+        <Component {...pageProps} />
+      </StoreProvide>
+    </SnackbarProvider>
   );
 }
 
