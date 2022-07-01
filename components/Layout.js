@@ -67,7 +67,7 @@ function Layout({ title, description, children }) {
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
               ></Switch>
-              <NextLink href="/Cart" passHref>
+              <NextLink href="/cart" passHref>
                 <Link>
                   <Typography component="span">
                     {cart.cartItems.length > 0 ? (
@@ -84,7 +84,7 @@ function Layout({ title, description, children }) {
                   </Typography>
                 </Link>
               </NextLink>
-              <NextLink href="/Login" passHref>
+              <NextLink href="/login" passHref>
                 <Link>Login</Link>
               </NextLink>
             </div>
