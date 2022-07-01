@@ -5,6 +5,9 @@ export const Store = createContext();
 
 const initialState = {
   darkMode: Cookies.get('cookie-theme') === 'ON' ? true : false,
+  userInfo: Cookies.get('cookie-userInfo')
+    ? JSON.parse(Cookies.get('cookie-userInfo'))
+    : null,
   cart: {
     cartItems: Cookies.get('cookie-cartItems')
       ? JSON.parse(Cookies.get('cookie-cartItems'))
@@ -14,10 +17,30 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'TOGGLE_DARK_MODE_ON':
-      return { ...state, darkMode: !state.darkMode };
-    case 'TOGGLE_DARK_MODE_OFF':
-      return { ...state, darkMode: !state.darkMode };
+    case 'TOGGLE_DARK_MODE_ON': {
+      const _darkTheme = !state.darkMode;
+      Cookies.set('cookie-theme', _darkTheme ? 'ON' : 'OFF');
+      return { ...state, darkMode: _darkTheme };
+    }
+
+    case 'USER_LOGIN': {
+      Cookies.set('cookie-userInfo', JSON.stringify(action.payload));
+      return { ...state, userInfo: action.payload };
+    }
+
+    case 'USER_LOGOUT': {
+      Cookies.remove('cookie-userInfo');
+      Cookies.remove('cookie-cartItems');
+
+      return { ...state, userInfo: null, cart: { cartItems: [] } };
+    }
+
+    case 'TOGGLE_DARK_MODE_OFF': {
+      const _darkTheme = !state.darkMode;
+      Cookies.set('cookie-theme', _darkTheme ? 'ON' : 'OFF');
+      return { ...state, darkMode: _darkTheme };
+    }
+
     case 'CART_REMOVE_ITEM': {
       const cartItems = state.cart.cartItems.filter(
         (item) => item._id !== action.payload._id

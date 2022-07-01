@@ -11,12 +11,15 @@ handler.post(async (request, response) => {
   const _user = await User.findOne({ email: request.body.email });
   await db.disconnect();
 
-  const isValid = await bcrypt.compare(request.body.password, _user.password);
-  console.log(isValid);
-
   if (_user && bcrypt.compareSync(request.body.password, _user.password)) {
     const token = signToken(_user);
-    response.send({ token, user: _user });
+    response.send({
+      token,
+      _id: _user._id,
+      name: _user.name,
+      email: _user.email,
+      isAdmin: _user.isAdmin,
+    });
   } else {
     response.status(401).send('Unauthorized');
   }
