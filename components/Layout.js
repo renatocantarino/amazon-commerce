@@ -2,7 +2,10 @@ import React, { useContext, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import useStyles from '../utils/styles';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import {
+  unstable_createMuiStrictModeTheme as createTheme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
 import {
   AppBar,
   Toolbar,

@@ -15,6 +15,7 @@ import {
   Typography,
   TableBody,
 } from '@material-ui/core';
+import dynamic from 'next/dynamic';
 import React, { useContext } from 'react';
 import Layout from '../components/Layout';
 import { Store } from '../utils/context/Store';
@@ -23,12 +24,14 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-export default function Cart() {
+function Cart() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems },
   } = state;
+
+  const { quantity, setQuantity } = React.useState(1);
 
   const updateQuantityHandler = async (item, quantity) => {
     const { data } = await axios.get(`/api/products/${item._id}`);
@@ -156,3 +159,5 @@ export default function Cart() {
     </Layout>
   );
 }
+
+export default dynamic(() => Promise.resolve(Cart), { ssr: false });
