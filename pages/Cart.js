@@ -31,8 +31,6 @@ function Cart() {
     cart: { cartItems },
   } = state;
 
-  const { quantity, setQuantity } = React.useState(1);
-
   const updateQuantityHandler = async (item, quantity) => {
     const { data } = await axios.get(`/api/products/${item._id}`);
     if (data.countInStock <= quantity) {

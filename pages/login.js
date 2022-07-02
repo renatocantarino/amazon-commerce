@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { Store } from '../utils/context/Store';
 import { useForm, Controller } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
+import { getError } from '../utils/error';
 
 export default function Login() {
   const {
@@ -47,9 +48,7 @@ export default function Login() {
       dispatch({ type: 'USER_LOGIN', payload: data });
       router.push(redirect || '/');
     } catch (err) {
-      enqueueSnackbar(err.response.data ? err.response.data : err.message, {
-        variant: 'error',
-      });
+      enqueueSnackbar(getError(err), { variant: 'error' });
     }
   };
 
