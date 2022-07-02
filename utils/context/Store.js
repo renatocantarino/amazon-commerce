@@ -12,6 +12,9 @@ const initialState = {
     cartItems: Cookies.get('cookie-cartItems')
       ? JSON.parse(Cookies.get('cookie-cartItems'))
       : [],
+    shippingAddress: Cookies.get('cookie-shipping')
+      ? JSON.parse(Cookies.get('cookie-shipping'))
+      : {},
   },
 };
 
@@ -31,6 +34,7 @@ function reducer(state, action) {
     case 'USER_LOGOUT': {
       Cookies.remove('cookie-userInfo');
       Cookies.remove('cookie-cartItems');
+      Cookies.remove('cookie-shipping');
 
       return { ...state, userInfo: null, cart: { cartItems: [] } };
     }
@@ -48,6 +52,14 @@ function reducer(state, action) {
 
       Cookies.set('cookie-cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
+    }
+
+    case 'SAVE_SHIPPING_ADDRESS': {
+      Cookies.set('cookie-shipping', JSON.stringify(action.payload));
+      return {
+        ...state,
+        cart: { ...state.cart, shippingAddress: action.payload },
+      };
     }
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
