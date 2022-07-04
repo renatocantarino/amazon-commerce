@@ -15,6 +15,9 @@ const initialState = {
     shippingAddress: Cookies.get('cookie-shipping')
       ? JSON.parse(Cookies.get('cookie-shipping'))
       : {},
+    paymentMethod: Cookies.get('cookie-paymentMethod')
+      ? JSON.parse(Cookies.get('cookie-paymentMethod'))
+      : {},
   },
 };
 
@@ -24,6 +27,14 @@ function reducer(state, action) {
       const _darkTheme = !state.darkMode;
       Cookies.set('cookie-theme', _darkTheme ? 'ON' : 'OFF');
       return { ...state, darkMode: _darkTheme };
+    }
+
+    case 'SAVE_PAYMENT_METHOD': {
+      Cookies.set('cookie-paymentMethod', JSON.stringify(action.payload));
+      return {
+        ...state,
+        cart: { ...state.cart, paymentMethod: action.payload },
+      };
     }
 
     case 'USER_LOGIN': {

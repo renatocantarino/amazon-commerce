@@ -95,10 +95,10 @@ function Layout({ title, description, children }) {
                         overlap="rectangular"
                         badgeContent={cart.cartItems.length}
                       >
-                        Cart
+                        cart
                       </Badge>
                     ) : (
-                      'Cart'
+                      'cart'
                     )}
                   </Typography>
                 </Link>

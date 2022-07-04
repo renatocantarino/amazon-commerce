@@ -7,7 +7,6 @@ import {
   Button,
 } from '@material-ui/core';
 
-import { useSnackbar } from 'notistack';
 import { Store } from '../utils/context/Store';
 import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
@@ -33,9 +32,9 @@ export default function Shipping() {
   const classes = useStyles();
 
   useEffect(() => {
-    // if (!userInfo) {
-    //   router.push('/login?redirect=/shipping');
-    // }
+    if (!userInfo) {
+      router.push('/login?redirect=/shipping');
+    }
 
     setValue('fullName', shippingAddress.fullName);
     setValue('address', shippingAddress.address);
