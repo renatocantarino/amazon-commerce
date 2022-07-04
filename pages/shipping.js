@@ -45,14 +45,14 @@ export default function Shipping() {
 
   const submitHandler = async ({
     fullname,
-    adress,
+    address,
     city,
     postalCode,
-    countty,
+    country,
   }) => {
     dispatch({
       type: 'SAVE_SHIPPING_ADDRESS',
-      payload: { fullname, adress, city, postalCode, countty },
+      payload: { fullname, address, city, postalCode, country },
     });
 
     router.push('/payment');

@@ -3,6 +3,7 @@ import { Store } from '../utils/context/Store';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import useStyles from '../utils/styles';
+import Cookies from 'js-cookie';
 import { useSnackbar } from 'notistack';
 import CheckoutWizard from '../components/checkoutWizard';
 import {
@@ -27,7 +28,7 @@ export default function payment() {
   const classes = useStyles();
 
   useEffect(() => {
-    if (!shippinAdress.adress) {
+    if (!shippingAddress.address) {
       router.push('/shipping');
     } else {
       setPaymentMethod(Cookies.get('paymentMethod') || '');
@@ -47,7 +48,7 @@ export default function payment() {
   return (
     <Layout title="Payment Method">
       <CheckoutWizard activeStep={2}></CheckoutWizard>
-      <form onSubmit={submitHandler} className={classes.form}>
+      <form className={classes.form} onSubmit={submitHandler}>
         <Typography component="h1" variant="h1">
           Payment Method
         </Typography>
@@ -56,29 +57,30 @@ export default function payment() {
             <FormControl component="fieldset">
               <RadioGroup
                 aria-label="Payment Method"
-                name="paymentmethod"
+                name="paymentMethod"
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-              ></RadioGroup>
-              <FormControlLabel
-                label="PayPal"
-                value="paypal"
-                control={<Radio />}
-              ></FormControlLabel>
-              <FormControlLabel
-                label="Stripe"
-                value="stripe"
-                control={<Radio />}
-              ></FormControlLabel>
-              <FormControlLabel
-                label="Cash on Delivery"
-                value="cash"
-                control={<Radio />}
-              ></FormControlLabel>
+              >
+                <FormControlLabel
+                  label="PayPal"
+                  value="PayPal"
+                  control={<Radio />}
+                ></FormControlLabel>
+                <FormControlLabel
+                  label="Stripe"
+                  value="Stripe"
+                  control={<Radio />}
+                ></FormControlLabel>
+                <FormControlLabel
+                  label="Cash"
+                  value="Cash"
+                  control={<Radio />}
+                ></FormControlLabel>
+              </RadioGroup>
             </FormControl>
           </ListItem>
           <ListItem>
-            <Button fullWidth type="submit" variant="outlined" color="primary">
+            <Button fullWidth type="submit" variant="contained" color="primary">
               Continue
             </Button>
           </ListItem>
@@ -86,7 +88,7 @@ export default function payment() {
             <Button
               fullWidth
               type="button"
-              variant="outlined"
+              variant="contained"
               onClick={() => router.push('/shipping')}
             >
               Back
