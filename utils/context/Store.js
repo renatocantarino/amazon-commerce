@@ -16,8 +16,8 @@ const initialState = {
       ? JSON.parse(Cookies.get('cookie-shipping'))
       : {},
     paymentMethod: Cookies.get('cookie-paymentMethod')
-      ? JSON.parse(Cookies.get('cookie-paymentMethod'))
-      : {},
+      ? Cookies.get('cookie-paymentMethod')
+      : '',
   },
 };
 
@@ -37,6 +37,10 @@ function reducer(state, action) {
       };
     }
 
+    case 'CART_CLEAR': {
+      Cookies.remove('cookie-cartItems');
+    }
+
     case 'USER_LOGIN': {
       Cookies.set('cookie-userInfo', JSON.stringify(action.payload));
       return { ...state, userInfo: action.payload };
@@ -46,6 +50,7 @@ function reducer(state, action) {
       Cookies.remove('cookie-userInfo');
       Cookies.remove('cookie-cartItems');
       Cookies.remove('cookie-shipping');
+      Cookies.remove('cookie-paymentMethod');
 
       return { ...state, userInfo: null, cart: { cartItems: [] } };
     }
