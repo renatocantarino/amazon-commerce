@@ -5,11 +5,12 @@ import { isAuth } from '../../../../utils/auth';
 
 const handler = nc();
 handler.use(isAuth);
-handler.get(async (req, res) => {
+
+handler.get(async (request, response) => {
   await db.connect();
-  const order = await Order.findById(req.query.id);
+  const order = await Order.findById(request.query.id);
   await db.disconnect();
-  res.send(order);
+  response.send(order);
 });
 
 export default handler;

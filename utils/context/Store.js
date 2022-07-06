@@ -39,6 +39,7 @@ function reducer(state, action) {
 
     case 'CART_CLEAR': {
       Cookies.remove('cookie-cartItems');
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
     }
 
     case 'USER_LOGIN': {
@@ -52,7 +53,15 @@ function reducer(state, action) {
       Cookies.remove('cookie-shipping');
       Cookies.remove('cookie-paymentMethod');
 
-      return { ...state, userInfo: null, cart: { cartItems: [] } };
+      return {
+        ...state,
+        userInfo: null,
+        cart: {
+          cartItems: [],
+          shippingAddress: {},
+          paymentMethod: '',
+        },
+      };
     }
 
     case 'TOGGLE_DARK_MODE_OFF': {
